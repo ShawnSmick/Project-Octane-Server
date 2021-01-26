@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pickup : MonoBehaviour
+public class Pickup : NetworkObject
 {
-    public int id;
     public int Type;
+    public override void NetworkFixedUpdate()
+    {
+
+    }
 }

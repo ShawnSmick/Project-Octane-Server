@@ -91,14 +91,12 @@ public class User : MonoBehaviour
         }   
         ServerSend.SetHealth(GetID(),child.GetHealthInt());
         //Send the Client all existing missiles
-        foreach (MissileBase _missile in Server.Missiles.Values)
+        foreach (NetworkObject netOb in Server.NetworkedObjects.Values)
         {
-            ServerSend.InitMissiles(GetID(),-1,_missile);//TODO: make it assign the missiles the correct id instead of making them all -1, its not a big deal but it's sloppy
-        }
-        //Send the Client all existing pickups
-        foreach (Pickup _pickup in Server.Pickups.Values)
-        {
-            ServerSend.InitPickup(GetID(),_pickup);
+            if(netOb is MissileBase)
+                ServerSend.InitMissiles(GetID(),-1,(MissileBase)netOb);//TODO: make it assign the missiles the correct id instead of making them all -1, its not a big deal but it's sloppy
+            if(netOb is Pickup)
+                ServerSend.InitPickup(GetID(),(Pickup)netOb);
         }
 
     }

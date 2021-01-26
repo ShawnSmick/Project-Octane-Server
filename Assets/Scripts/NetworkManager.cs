@@ -24,6 +24,10 @@ public class NetworkManager : MonoBehaviour
                 
                     break;
         }
+        foreach (NetworkObject netOb in Server.NetworkedObjects.Values)
+        {
+            netOb.NetworkFixedUpdate();
+        }
     }
     private void Lobby()
     {

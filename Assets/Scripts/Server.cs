@@ -22,8 +22,9 @@ class Server
     private static UdpClient udpListener;
     public static int FUCK = -1;
     public static Dictionary<int,Client> clients = new Dictionary<int,Client>();
-    public static Dictionary<int,MissileBase> Missiles = new Dictionary<int,MissileBase>();
-    public static Dictionary<int,Pickup> Pickups = new Dictionary<int,Pickup>();
+    //public static Dictionary<int,MissileBase> Missiles = new Dictionary<int,MissileBase>();
+    //public static Dictionary<int,Pickup> Pickups = new Dictionary<int,Pickup>();
+    public static Dictionary<int,NetworkObject> NetworkedObjects = new Dictionary<int,NetworkObject>(); 
     public static SpawnPoint[] Spawns;
 
 
@@ -74,22 +75,23 @@ class Server
             _id++;
         }
     }
-    public static void AddPickup(int _id,Pickup _pickup)
+    public static void AddPickup(int id,Pickup pickup)
     {
-        if (Pickups.ContainsKey(_id))
+        if (NetworkedObjects.ContainsKey(id))
         {
-            AddPickup(_id + 1,_pickup);
+            AddPickup(id + 1,pickup);
         }
         else
         {
-            _pickup.id = _id;
-            Pickups.Add(_id,_pickup);
+            pickup.SetID(id);
+            NetworkedObjects.Add(id,pickup);
         }
     }
     public static void UnInitializeMap()
     {
-        Missiles = new Dictionary<int,MissileBase>();
-        Pickups = new Dictionary<int,Pickup>();
+        //Missiles = new Dictionary<int,MissileBase>();
+        //Pickups = new Dictionary<int,Pickup>();
+        NetworkedObjects = new Dictionary<int,NetworkObject>();
         Spawns = null;
     }
     private static void TCPConnectCallback(IAsyncResult _result)
@@ -196,14 +198,14 @@ class Server
     }
     public static void AddMissile(int _id,MissileBase _missile)
     {
-        if (Missiles.ContainsKey(_id))
+        if (NetworkedObjects.ContainsKey(_id))
         {
             AddMissile(_id + 1,_missile);
         }
         else
         {
-            _missile.id = _id;
-            Missiles.Add(_id,_missile);
+            _missile.SetID(_id);
+            NetworkedObjects.Add(_id,_missile);
         }
     }
     

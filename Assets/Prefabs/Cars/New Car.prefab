@@ -1314,7 +1314,7 @@ MonoBehaviour:
   skidThreshold: 0.5
   skidTime: 0
   startSkidTime: 0.8
-  maxSkidTime: 1
+  maxSkidTime: 0.8
   TurnMult: 2
 --- !u!114 &7989148448293510157
 MonoBehaviour:

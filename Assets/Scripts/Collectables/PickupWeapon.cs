@@ -16,9 +16,9 @@ public class PickupWeapon : Pickup
             CarEngine _player = other.gameObject.GetComponent<CarEngine>();
             _player.GetMissileRack().LoadAmmo(AmmoType,Amount);
             Amount -= Amount;
-            Server.Pickups.Remove(id);
+            Server.NetworkedObjects.Remove(GetID());
             ServerSend.SetAmmo(_player.GetId(),_player.GetMissileRack().getAmmo());
-            ServerSend.KillPickup(id);
+            ServerSend.KillPickup(GetID());
             Destroy(gameObject);
         }
 

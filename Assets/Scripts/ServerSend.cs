@@ -166,7 +166,7 @@ class ServerSend
         using (Packet _packet = new Packet((int) ServerPackets.TestMissile))
         {
             _packet.Write(_FromClient);
-            _packet.Write(_missile.id);
+            _packet.Write(_missile.GetID());
             _packet.Write(_missile.type);
             _packet.Write(_missile.transform.position);
             _packet.Write(_missile.transform.rotation);
@@ -179,7 +179,7 @@ class ServerSend
         using (Packet _packet = new Packet((int) ServerPackets.TestMissile))
         {
             _packet.Write(_FromClient);
-            _packet.Write(_missile.id);
+            _packet.Write(_missile.GetID());
             _packet.Write(_missile.type);
             _packet.Write(_missile.transform.position);
             _packet.Write(_missile.transform.rotation);
@@ -192,9 +192,20 @@ class ServerSend
         using (Packet _packet = new Packet((int) ServerPackets.MissileUpdate))
         {
             //Debug.Log("Updating Missile");
-            _packet.Write(_missile.id);
+            _packet.Write(_missile.GetID());
             _packet.Write(_missile.transform.position);
             _packet.Write(_missile.transform.rotation);
+            SendUDPDataToAll(_packet);
+        }
+    }
+    public static void NetworkObjectUpdate(NetworkObject NetOb)
+    {
+        using (Packet _packet = new Packet((int) ServerPackets.NetworkObjectUpdate))
+        {
+            //Debug.Log("Updating Missile");
+            _packet.Write(NetOb.GetID());
+            _packet.Write(NetOb.transform.position);
+            _packet.Write(NetOb.transform.rotation);
             SendUDPDataToAll(_packet);
         }
     }
@@ -211,7 +222,7 @@ class ServerSend
     {
         using (Packet _packet = new Packet((int) ServerPackets.SpawnPickup))
         {
-            _packet.Write(_pickup.id);
+            _packet.Write(_pickup.GetID());
             _packet.Write(_pickup.Type);
             _packet.Write(_pickup.transform.position);
             SendTCPData(_toClient,_packet);
@@ -221,7 +232,7 @@ class ServerSend
     {
         using (Packet _packet = new Packet((int) ServerPackets.SpawnPickup))
         {
-            _packet.Write(_pickup.id);
+            _packet.Write(_pickup.GetID());
             _packet.Write(_pickup.Type);
             _packet.Write(_pickup.transform.position);
             SendTCPDataToAll(_packet);

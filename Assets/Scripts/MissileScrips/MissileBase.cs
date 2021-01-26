@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MissileBase : MonoBehaviour
+public class MissileBase : NetworkObject
 {
     // Start is called before the first frame update
     [SerializeField]
@@ -25,7 +25,6 @@ public class MissileBase : MonoBehaviour
   //  private ParticleSystem emit;
   //  public GameObject explosion;
     public float aliveTime = 0;
-    public int id;
     public int volley = 0;
     public float volleyRate = .1f;
     void Start()
@@ -35,12 +34,12 @@ public class MissileBase : MonoBehaviour
     }
  
 
-    void FixedUpdate()
+    public override void NetworkFixedUpdate()
     {
         aliveTime += Time.deltaTime;
         transform.position += transform.forward * speed * Time.fixedDeltaTime;
         if(synced)
-            ServerSend.MissileUpdate(this);
+            base.NetworkFixedUpdate();
         if (aliveTime > killTime)
             IsKill();
         
@@ -156,7 +155,7 @@ public class MissileBase : MonoBehaviour
 
         if (_player.Car.Debuffs.ContainsKey("Frozen"))
         {
-            MissileBase freezeMiss = NetworkManager.instance.InstantiateMissile(id,6,transform.position,Quaternion.LookRotation(-transform.forward,Vector3.up));
+            MissileBase freezeMiss = NetworkManager.instance.InstantiateMissile(GetID(),6,transform.position,Quaternion.LookRotation(-transform.forward,Vector3.up));
 
             freezeMiss.SetParent(_player.gameObject);
             freezeMiss.target = _parent.GetComponent<Target>();
@@ -191,8 +190,8 @@ public class MissileBase : MonoBehaviour
     }
     public void IsKill()
     {
-        Server.Missiles.Remove(id);
-        ServerSend.MissileDestroyed(id);
+        Server.NetworkedObjects.Remove(GetID());
+        ServerSend.MissileDestroyed(GetID());
         Destroy(gameObject);//Dead... not big surprise.
     }
     private void DetachParticle()

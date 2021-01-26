@@ -16,9 +16,9 @@ public class PickupTurbo : Pickup
             {
 
                 _player.FillTurbo();
-                Server.Pickups.Remove(id);
+                Server.NetworkedObjects.Remove(GetID());
                 ServerSend.SetTurbo(_player.GetId(),_player.GetTurbo());
-                ServerSend.KillPickup(id);
+                ServerSend.KillPickup(GetID());
                 Destroy(gameObject);
             }
         }
